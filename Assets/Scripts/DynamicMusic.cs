@@ -9,7 +9,7 @@ public class DynamicMusic : MonoBehaviour {
     {
 
         //DONT CALL THIS ON START
-        SetSpatialize(false);	
+        //SetSpatialize(false);	
 	}
 	
 	// Update is called once per frame
@@ -36,6 +36,8 @@ public class DynamicMusic : MonoBehaviour {
         if (col.tag == "Player")
         {
             SetSpatialize(false);
+            AudioSource source = GetComponent<AudioSource>();
+            //source.pitch *= 1.5f;
             Destroy(this);
         }
     }

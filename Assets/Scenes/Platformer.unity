@@ -17079,7 +17079,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1388735372}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 36.73, y: 15, z: 1}
@@ -19702,13 +19702,14 @@ GameObject:
   - component: {fileID: 1642081782}
   - component: {fileID: 1642081778}
   - component: {fileID: 1642081777}
+  - component: {fileID: 1642081783}
   m_Layer: 0
   m_Name: Synthesizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1642081777
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19886,6 +19887,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1642081783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1642081776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b43b52d4e578f5c42acbafb178656dbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: 0.1
+  scaleNotes: 
 --- !u!4 &1644851798 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000012932433582, guid: 2aff10bfb2fc49544bc01a99cdf9b0fd,
