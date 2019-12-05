@@ -21,7 +21,9 @@ public class MovingPlatform : MonoBehaviour
     private Vector3 startPos;
     private float xDirection, yDirection, zDirection, xStart, yStart, zStart, xTimer, yTimer, zTimer;
     private bool isXPaused, isYPaused, isZPaused, xLeft, yLeft, zLeft;
-    
+    bool soundStopped = false;
+    float maxVolume;
+
     // Use this for initialization
     void Start()
     {
@@ -36,6 +38,8 @@ public class MovingPlatform : MonoBehaviour
         StartSpeed();
 
         sound = GetComponent<AudioSource>();
+
+        maxVolume = sound.volume;
     }
 
     // Update is called once per frame
@@ -60,10 +64,18 @@ public class MovingPlatform : MonoBehaviour
 
     void MovePlatform()
     {
-        if (xSpeed == 0 && ySpeed == 0 && zSpeed == 0) 
-            sound.Stop();
+        if (xSpeed == 0 && ySpeed == 0 && zSpeed == 0)
+        {
+            if (!soundStopped)
+            {
+                FadeOutSound();
+            }
+        }
         else if (!sound.isPlaying)
+        {
             sound.Play();
+            soundStopped = false;
+        }
 
         Vector3 pos = gameObject.transform.parent.position;
         pos = Move(pos);
@@ -193,4 +205,17 @@ public class MovingPlatform : MonoBehaviour
             zDirection = SetDirection(zSpeed, zLeft);
         }
     }
+
+    private void FadeOutSound()
+    {
+        sound.volume -= 0.01f;
+        if(sound.volume <= 0)
+        {
+            sound.Stop();
+            soundStopped = true;
+            sound.volume = maxVolume;
+        }
+    }
 }
+
+

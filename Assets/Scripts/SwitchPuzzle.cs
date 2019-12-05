@@ -48,19 +48,16 @@ public class SwitchPuzzle : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+
     }
 
-    private void PressSwitch()
+    private void CorrectSwitch()
     {
         current[group]++;
         if (number == current[group])
         {
             isActive = true;
             correctSound.Play();
-            click.Play();
-            Vector3 pos = transform.position;
-            pos.y -= gameObject.transform.lossyScale.y / 2;
-            transform.position = pos;
             if (current[group] == maxNumber[group])
                 FinalSwitch();
         }
@@ -73,14 +70,28 @@ public class SwitchPuzzle : MonoBehaviour {
             {
                 if (s.GetComponent<SwitchPuzzle>().isActive == true && s.GetComponent<SwitchPuzzle>().group == group)
                 {
-                    Vector3 pos = s.transform.position;
-                    pos.y += s.transform.lossyScale.y / 2;
-                    s.transform.position = pos;
                     s.GetComponent<SwitchPuzzle>().isActive = false;
                 }
             }
             current[group] = -1;
         }
+    }
+
+    private void PressSwitch()
+    {
+        click.Play();
+        Vector3 pos = transform.position;
+        pos.y -= gameObject.transform.lossyScale.y / 2;
+        transform.position = pos;
+        if (!isActive)
+            CorrectSwitch();
+    }
+
+    private void UnpressSwitch()
+    {
+        Vector3 pos = transform.position;
+        pos.y += transform.lossyScale.y / 2;
+        transform.position = pos;
     }
 
     void FinalSwitch()
@@ -104,8 +115,15 @@ public class SwitchPuzzle : MonoBehaviour {
     {
         if (col.tag == "Player")
         {
-            if (!isActive)
-                PressSwitch();
+            PressSwitch();
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.tag == "Player")
+        {
+            UnpressSwitch();
         }
     }
 }

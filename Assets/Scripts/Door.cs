@@ -14,7 +14,7 @@ public class Door : MonoBehaviour
     public GameObject player;
     private Transform door;
 
-    private AudioSource sound;
+    private AudioSource[] sounds;
 
     // Use this for initialization
     void Start()
@@ -23,7 +23,7 @@ public class Door : MonoBehaviour
         startPos = door.transform.position;
         state = isDoorOpenOnStart? doorState.opening : doorState.stationary;
 
-        sound = GetComponent<AudioSource>();
+        sounds = GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -39,16 +39,17 @@ public class Door : MonoBehaviour
         {
             case doorState.opening:
                 OpenDoor();
-                if (!sound.isPlaying)
-                    sound.Play();
+                //if (!sound.isPlaying)
+                //    sound.Play();
                 break;
             case doorState.closing:
                 CloseDoor();
-                if (!sound.isPlaying)
-                    sound.Play();
+                //if (!sound.isPlaying)
+                //    sound.Play();
                 break;
             default:
-                sound.Stop();
+                //sounds[0].Stop();
+                //sounds[1].Stop();
                 state = doorState.stationary;
                 break;
         }
@@ -110,6 +111,8 @@ public class Door : MonoBehaviour
         if (col.tag == "Player")
         {
             state = doorState.opening;
+            if (!sounds[0].isPlaying)
+                sounds[0].Play();
         }
     }
     
@@ -118,6 +121,8 @@ public class Door : MonoBehaviour
         if (col.tag == "Player")
         {
             state = doorState.closing;
+            if (!sounds[1].isPlaying)
+                sounds[1].Play();
         }
     }
 }

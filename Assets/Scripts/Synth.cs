@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class Synth : MonoBehaviour {
+public class Synth{// : MonoBehaviour {
 
     //[Range(50, 1000)]
     //public float frequency = 440.0f;
