@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class Synth{// : MonoBehaviour {
+public class Synth : MonoBehaviour {
 
     //[Range(50, 1000)]
     //public float frequency = 440.0f;
@@ -19,7 +19,7 @@ public class Synth{// : MonoBehaviour {
     float phase;
     float samplingFrequency = 48000.0f;
 
-    public int[] scaleNotes;
+    int[] scaleNotes;
     float thisFrequency;
 
     int currentNotes;
@@ -63,57 +63,57 @@ public class Synth{// : MonoBehaviour {
   //          gain = 0.0f;
   //      }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AddNote(scaleNotes[5]);
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            RemoveNote(scaleNotes[5]);
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    AddNote(scaleNotes[5]);
+        //}
+        //else if (Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    RemoveNote(scaleNotes[5]);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            AddNote(scaleNotes[1]);
-        }
-        else if (Input.GetKeyUp(KeyCode.D))
-        {
-            RemoveNote(scaleNotes[1]);
-        }
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    AddNote(scaleNotes[1]);
+        //}
+        //else if (Input.GetKeyUp(KeyCode.D))
+        //{
+        //    RemoveNote(scaleNotes[1]);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            AddNote(scaleNotes[4]);
-        }
-        else if (Input.GetKeyUp(KeyCode.A))
-        {
-            RemoveNote(scaleNotes[4]);
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            AddNote(scaleNotes[0]);
-        }
-        else if (Input.GetKeyUp(KeyCode.W))
-        {
-            RemoveNote(scaleNotes[0]);
-        }
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    AddNote(scaleNotes[4]);
+        //}
+        //else if (Input.GetKeyUp(KeyCode.A))
+        //{
+        //    RemoveNote(scaleNotes[4]);
+        //}
 
 
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            AddNote(scaleNotes[2]);
-        }
-        else if (Input.GetKeyUp(KeyCode.S))
-        {
-            RemoveNote(scaleNotes[2]);
-        }
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    AddNote(scaleNotes[0]);
+        //}
+        //else if (Input.GetKeyUp(KeyCode.W))
+        //{
+        //    RemoveNote(scaleNotes[0]);
+        //}
 
-        else
-        {
-            //gain = 0.0f;
-        }
+
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    AddNote(scaleNotes[2]);
+        //}
+        //else if (Input.GetKeyUp(KeyCode.S))
+        //{
+        //    RemoveNote(scaleNotes[2]);
+        //}
+
+        //else
+        //{
+        //    //gain = 0.0f;
+        //}
 
 
 
@@ -184,12 +184,12 @@ public class Synth{// : MonoBehaviour {
         return Mathf.Sin(2 * Mathf.PI * timeIndex * frequency / sampleRate) * amplitude;
     }
 
-    void AddNote(int midiNo)
+    public void AddNote(int midiNo)
     {
         noteFreqs.Add(CalculateFrequencyFromMIDINumber(midiNo));
     }
 
-    void RemoveNote(int midiNo)
+    public void RemoveNote(int midiNo)
     {
         noteFreqs.Remove(CalculateFrequencyFromMIDINumber(midiNo));
     }
