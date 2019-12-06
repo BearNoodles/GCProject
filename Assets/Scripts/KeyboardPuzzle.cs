@@ -10,6 +10,7 @@ public class KeyboardPuzzle : MonoBehaviour {
 
     Synth synthesiser;
 
+    private AudioSource correctSound;
 
     public List<GameObject> puzzleObjects;
 
@@ -18,6 +19,7 @@ public class KeyboardPuzzle : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        puzzleComplete = false;
         nextKey = 0;
 
         synthesiser = GetComponent<Synth>();
@@ -28,11 +30,18 @@ public class KeyboardPuzzle : MonoBehaviour {
         {
             keyObjects.Add(transform.GetChild(i).gameObject);
         }
-	}
+
+        foreach (AudioSource sound in GetComponents<AudioSource>())
+        {
+            if (sound.clip && sound.clip.name == "correct")
+                correctSound = sound;
+        }
+    }
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+        //Debug.Log(nextKey);
 	}
 
     public void PlayNote(int midiNo)
@@ -52,10 +61,14 @@ public class KeyboardPuzzle : MonoBehaviour {
 
     public void AdvanceKeNumber()
     {
+        if(puzzleComplete)
+        {
+            return;
+        }
         nextKey++;
         if(nextKey > finalKey)
         {
-
+            CompletePuzzle();
         }
     }
 
@@ -66,6 +79,12 @@ public class KeyboardPuzzle : MonoBehaviour {
 
     private void CompletePuzzle()
     {
+        //correctSound.Play();
+        synthesiser.AddTimedNote(57, 0.5f);
+        synthesiser.AddTimedNote(58, 0.5f);
+        synthesiser.AddTimedNote(59, 0.5f);
+        synthesiser.AddTimedNote(60, 0.5f);
+        puzzleComplete = true;
         for (int i = 0; i < puzzleObjects.Count; i++)// GameObject thing in switchControls)
         {
             if (puzzleObjects[i] != null)

@@ -7,6 +7,14 @@ public class Synth : MonoBehaviour {
 
     //[Range(50, 1000)]
     //public float frequency = 440.0f;
+
+    public class TimedNote
+    {
+        public float timer;
+        public float maxTime;
+        public int midiNumber;
+        public bool remove = false;
+    }
     
     [Range(0.0f, 1.0f)]
     float gain = 0.0f;
@@ -14,6 +22,7 @@ public class Synth : MonoBehaviour {
     [Range(0.0f, 1.0f)]
     public float volume;
 
+    List<TimedNote> timedNotes;
     List<float> noteFreqs;
     float increment;
     float phase;
@@ -32,12 +41,40 @@ public class Synth : MonoBehaviour {
         scaleNotes = new int[7] { 69, 71, 72, 74, 76, 77, 79 };
         currentNotes = 0;
         noteFreqs = new List<float>();
+        timedNotes = new List<TimedNote>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        Debug.Log(timedNotes.Count);
         Vector2 input = GetInput();
+
+        //ONLY UPDATE TIME IF TIMED NOTE IS CURRENTLY PLAYING
+        if(timedNotes[0] != null)
+        {
+            if (noteFreqs.Count <= 0)
+            {
+                AddNote(timedNotes[0].midiNumber);
+            }
+            timedNotes[0].timer += Time.deltaTime;
+            if (timedNotes[0].timer > timedNotes[0].maxTime)
+            {
+                RemoveNote(timedNotes[0].midiNumber);
+                timedNotes.Remove(timedNotes[0]);
+            }
+        }
+        
+        //foreach(TimedNote t in timedNotes)
+        //{
+        //    t.timer += Time.deltaTime;
+        //    if(t.timer > t.maxTime)
+        //    {
+        //        RemoveNote(t.midiNumber);
+        //        t.remove = true;
+        //    }
+        //}
+        
 		//if(Input.GetKey(KeyCode.Space))
   //      {
   //          PlayNote(scaleNotes[5]);
@@ -187,6 +224,13 @@ public class Synth : MonoBehaviour {
     public void AddNote(int midiNo)
     {
         noteFreqs.Add(CalculateFrequencyFromMIDINumber(midiNo));
+    }
+
+    public void AddTimedNote(int midiNo, float time)
+    {
+        TimedNote temp = new TimedNote() { maxTime = time, midiNumber = midiNo };
+        timedNotes.Add(temp);
+        //noteFreqs.Add(CalculateFrequencyFromMIDINumber(midiNo));
     }
 
     public void RemoveNote(int midiNo)
