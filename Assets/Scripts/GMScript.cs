@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class GMScript : MonoBehaviour
 {
     public RigidbodyFirstPersonController player;
+    private AudioSource playerDeathSound;
+    int died;
     public Canvas canvas;
     public static int retries;
     private Text retryText;
@@ -35,12 +37,30 @@ public class GMScript : MonoBehaviour
             playerPos = Checkpoint.SetResetPosition();
         }
 
+        died = PlayerPrefs.GetInt("died");
+
         player.transform.position = playerPos;
         retryText = GameObject.Find("/Canvas/RetryText").GetComponent<Text>();
         retries = PlayerPrefs.GetInt("retries");
 
         gameTimeText = GameObject.Find("/Canvas/TimeText").GetComponent<Text>();
         gameTimer = PlayerPrefs.GetFloat("time");
+
+        foreach(AudioSource a in player.GetComponents<AudioSource>())
+        {
+            if(a.clip.name == "aah")
+            {
+                playerDeathSound = a;
+                break;
+            }
+        }
+
+        if(died == 1)
+        {
+            playerDeathSound.Play();
+        }
+
+        PlayerPrefs.SetInt("died", 0);
     }
 
     // Update is called once per frame
@@ -59,7 +79,7 @@ public class GMScript : MonoBehaviour
         if (player.transform.position.y < -5)
         {
             resetPos = Checkpoint.SetResetPosition();
-            Reset(resetPos.x, resetPos.y, resetPos.z, retries + 1, gameTimer);
+            Reset(resetPos.x, resetPos.y, resetPos.z, retries + 1, gameTimer, 1);
         }
 
         pTimer = player.GetComponent<RigidbodyFirstPersonController>().Timer;
@@ -81,18 +101,18 @@ public class GMScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             resetPos = Checkpoint.SetResetPosition();
-            Reset(resetPos.x, resetPos.y, resetPos.z, retries + 1, gameTimer);
+            Reset(resetPos.x, resetPos.y, resetPos.z, retries + 1, gameTimer, 0);
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
             resetPos = Checkpoint.NextCheckpoint();
-            Reset(resetPos.x, resetPos.y, resetPos.z, retries, gameTimer);
+            Reset(resetPos.x, resetPos.y, resetPos.z, retries, gameTimer, 0);
         }
 
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Reset(-35, 10, -152, 0, 0);
+            Reset(-35, 10, -152, 0, 0, 0);
         }
 
         if (Input.GetKeyDown(KeyCode.T))
@@ -101,13 +121,15 @@ public class GMScript : MonoBehaviour
         }
     }
 
-    private static void Reset(float x, float y, float z, int retries, float time)
+    private static void Reset(float x, float y, float z, int retries, float time, int died)
     {
+        
         PlayerPrefs.SetInt("retries", retries);
         PlayerPrefs.SetFloat("time", time);
         PlayerPrefs.SetFloat("resetPosx", x - 5);
         PlayerPrefs.SetFloat("resetPosy", y);
         PlayerPrefs.SetFloat("resetPosz", z);
+        PlayerPrefs.SetInt("died", died);
         PlayerPrefs.Save();
         SceneManager.LoadScene(0);
     }

@@ -47,11 +47,11 @@ public class Synth : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Debug.Log(timedNotes.Count);
+        //Debug.Log(timedNotes.Count);
         Vector2 input = GetInput();
 
         //ONLY UPDATE TIME IF TIMED NOTE IS CURRENTLY PLAYING
-        if(timedNotes[0] != null)
+        if(timedNotes.Count > 0)
         {
             if (noteFreqs.Count <= 0)
             {
@@ -61,7 +61,7 @@ public class Synth : MonoBehaviour {
             if (timedNotes[0].timer > timedNotes[0].maxTime)
             {
                 RemoveNote(timedNotes[0].midiNumber);
-                timedNotes.Remove(timedNotes[0]);
+                timedNotes.RemoveAt(0);
             }
         }
         
@@ -179,17 +179,17 @@ public class Synth : MonoBehaviour {
                 phase += increment;
 
                 //Sin wave
-                //data[i] += gain * Mathf.Sin(phase);
+                data[i] += gain * Mathf.Sin(phase);
 
                 //Square wave
-                if(gain * Mathf.Sin(phase) >= 0)
-                {
-                    data[i] += gain * 0.6f;
-                }
-                else
-                {
-                    data[i] += -gain * 0.6f;
-                }
+                //if(gain * Mathf.Sin(phase) >= 0)
+                //{
+                //    data[i] += gain * 0.6f;
+                //}
+                //else
+                //{
+                //    data[i] += -gain * 0.6f;
+                //}
 
                 //Triangle wave
                 //data[i] += gain * Mathf.PingPong(phase, 1.0f);

@@ -85,11 +85,11 @@ public class KeyboardPuzzle : MonoBehaviour {
         synthesiser.AddTimedNote(59, 0.5f);
         synthesiser.AddTimedNote(60, 0.5f);
         puzzleComplete = true;
-        for (int i = 0; i < puzzleObjects.Count; i++)// GameObject thing in switchControls)
+        for (int i = 0; i < puzzleObjects.Count; i++)
         {
             if (puzzleObjects[i] != null)
             {
-                foreach (MonoBehaviour mono in puzzleObjects[i].gameObject.GetComponents<MonoBehaviour>())
+                foreach (MonoBehaviour mono in puzzleObjects[i].GetComponents<MonoBehaviour>())
                 {
                     if (mono.isActiveAndEnabled)
                         mono.enabled = false;
