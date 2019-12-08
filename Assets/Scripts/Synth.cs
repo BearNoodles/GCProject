@@ -8,6 +8,10 @@ public class Synth : MonoBehaviour {
     //[Range(50, 1000)]
     //public float frequency = 440.0f;
 
+    enum SynthType { sine, square, triangle};
+
+    SynthType type;
+
     public class TimedNote
     {
         public float timer;
@@ -35,13 +39,18 @@ public class Synth : MonoBehaviour {
 
     int timeIndex;
 
+    int x = 0;
+
     // Use this for initialization
     void Start()
     {
-        scaleNotes = new int[7] { 69, 71, 72, 74, 76, 77, 79 };
-        currentNotes = 0;
+        //scaleNotes = new int[7] { 69, 71, 72, 74, 76, 77, 79 };
+        //currentNotes = 0;
         noteFreqs = new List<float>();
         timedNotes = new List<TimedNote>();
+        
+        type = SynthType.sine;
+        
     }
 	
 	// Update is called once per frame
@@ -49,15 +58,21 @@ public class Synth : MonoBehaviour {
     {
         //Debug.Log(timedNotes.Count);
         Vector2 input = GetInput();
+        
 
         //ONLY UPDATE TIME IF TIMED NOTE IS CURRENTLY PLAYING
         if(timedNotes.Count > 0)
         {
-            if (noteFreqs.Count <= 0)
+            if(noteFreqs.Count <= 0)
             {
                 AddNote(timedNotes[0].midiNumber);
             }
-            timedNotes[0].timer += Time.deltaTime;
+            else
+            {
+                timedNotes[0].timer += Time.deltaTime;
+            }
+
+
             if (timedNotes[0].timer > timedNotes[0].maxTime)
             {
                 RemoveNote(timedNotes[0].midiNumber);
@@ -65,101 +80,20 @@ public class Synth : MonoBehaviour {
             }
         }
         
-        //foreach(TimedNote t in timedNotes)
-        //{
-        //    t.timer += Time.deltaTime;
-        //    if(t.timer > t.maxTime)
-        //    {
-        //        RemoveNote(t.midiNumber);
-        //        t.remove = true;
-        //    }
-        //}
-        
-		//if(Input.GetKey(KeyCode.Space))
-  //      {
-  //          PlayNote(scaleNotes[5]);
-  //      }
-  //      else if(Input.GetKey(KeyCode.D))
-  //      {
-  //          PlayNote(scaleNotes[1]);
-  //      }
-  //      else if(Input.GetKey(KeyCode.A))
-  //      {
-  //          PlayNote(scaleNotes[4]);
-  //      }
-  //      else if(Input.GetKey(KeyCode.W))
-  //      {
-  //          PlayNote(scaleNotes[0]);
-  //      }
-  //      else if (Input.GetKey(KeyCode.S))
-  //      {
-  //          PlayNote(scaleNotes[2]);
-  //      }
-  //      else
-  //      {
-  //          gain = 0.0f;
-  //      }
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    AddNote(scaleNotes[5]);
-        //}
-        //else if (Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    RemoveNote(scaleNotes[5]);
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.D))
-        //{
-        //    AddNote(scaleNotes[1]);
-        //}
-        //else if (Input.GetKeyUp(KeyCode.D))
-        //{
-        //    RemoveNote(scaleNotes[1]);
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    AddNote(scaleNotes[4]);
-        //}
-        //else if (Input.GetKeyUp(KeyCode.A))
-        //{
-        //    RemoveNote(scaleNotes[4]);
-        //}
-
-
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    AddNote(scaleNotes[0]);
-        //}
-        //else if (Input.GetKeyUp(KeyCode.W))
-        //{
-        //    RemoveNote(scaleNotes[0]);
-        //}
-
-
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    AddNote(scaleNotes[2]);
-        //}
-        //else if (Input.GetKeyUp(KeyCode.S))
-        //{
-        //    RemoveNote(scaleNotes[2]);
-        //}
-
-        //else
-        //{
-        //    //gain = 0.0f;
-        //}
-
-
-
-        gain = volume;
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            type++;
+            if((int)type > 2)
+            {
+                type = SynthType.sine;
+            }
+        }
+    
+            gain = volume;
     }
 
     private Vector2 GetInput()
     {
-
         Vector2 input = new Vector2
         {
             x = CrossPlatformInputManager.GetAxis("Horizontal"),
@@ -171,6 +105,12 @@ public class Synth : MonoBehaviour {
 
     void OnAudioFilterRead(float[] data, int channels)
     {
+        float gainFactor = gain;
+        if(noteFreqs.Count > 0)
+        {
+            gainFactor = gain / noteFreqs.Count;
+        }
+
         for (int n = 0; n < noteFreqs.Count; n++)
         {
             increment = noteFreqs[n] * 2.0f * Mathf.PI / samplingFrequency;
@@ -179,20 +119,30 @@ public class Synth : MonoBehaviour {
                 phase += increment;
 
                 //Sin wave
-                data[i] += gain * Mathf.Sin(phase);
+                if(type == SynthType.sine)
+                {
+                    data[i] += gainFactor * Mathf.Sin(phase);
+                }
 
                 //Square wave
-                //if(gain * Mathf.Sin(phase) >= 0)
-                //{
-                //    data[i] += gain * 0.6f;
-                //}
-                //else
-                //{
-                //    data[i] += -gain * 0.6f;
-                //}
+                else if (type == SynthType.square)
+                {
+                    if(gain * Mathf.Sin(phase) >= 0)
+                    {
+                        data[i] += gainFactor * 0.6f;
+                    }
+                    else
+                    {
+                        data[i] += -gainFactor * 0.6f;
+                    }
+                }
 
                 //Triangle wave
-                //data[i] += gain * Mathf.PingPong(phase, 1.0f);
+                else
+                {
+                    data[i] += gainFactor * Mathf.PingPong(phase, 1.0f);
+                }
+
 
                 
                 if (channels == 2)
@@ -230,12 +180,16 @@ public class Synth : MonoBehaviour {
     {
         TimedNote temp = new TimedNote() { maxTime = time, midiNumber = midiNo };
         timedNotes.Add(temp);
-        //noteFreqs.Add(CalculateFrequencyFromMIDINumber(midiNo));
     }
 
     public void RemoveNote(int midiNo)
     {
         noteFreqs.Remove(CalculateFrequencyFromMIDINumber(midiNo));
+    }
+
+    public void ClearNotes()
+    {
+        noteFreqs.Clear();
     }
 
     public void Stop()

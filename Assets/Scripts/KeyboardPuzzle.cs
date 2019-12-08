@@ -80,10 +80,12 @@ public class KeyboardPuzzle : MonoBehaviour {
     private void CompletePuzzle()
     {
         //correctSound.Play();
-        synthesiser.AddTimedNote(57, 0.5f);
-        synthesiser.AddTimedNote(58, 0.5f);
-        synthesiser.AddTimedNote(59, 0.5f);
+        synthesiser.ClearNotes();
         synthesiser.AddTimedNote(60, 0.5f);
+        synthesiser.AddTimedNote(57, 0.5f);
+        synthesiser.AddTimedNote(67, 0.5f);
+        synthesiser.AddTimedNote(64, 0.5f);
+        synthesiser.AddTimedNote(62, 0.5f);
         puzzleComplete = true;
         for (int i = 0; i < puzzleObjects.Count; i++)
         {

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class DynamicMusic : MonoBehaviour {
 
+    float Volume2d;
+    float Volume3d;
+
 	// Use this for initialization
 	void Start ()
     {
-
-        //DONT CALL THIS ON START
-        //SetSpatialize(false);	
+        Volume2d = 0.15f;
+        Volume3d = 1.0f;
 	}
 	
 	// Update is called once per frame
@@ -21,14 +23,20 @@ public class DynamicMusic : MonoBehaviour {
     void SetSpatialize(bool value)
     {
         int blendValue = 0;
-        if(value)
+        
+        AudioSource source = GetComponent<AudioSource>();
+        if (value)
         {
             blendValue = 1;
+            source.volume = Volume3d;
         }
-        AudioSource source = GetComponent<AudioSource>();
+        else
+        {
+            source.volume = Volume2d;
+        }
         source.spatialize = value;
         source.spatialBlend = blendValue;
-        source.volume = 0.2f;
+        
     }
 
     void OnTriggerEnter(Collider col)
@@ -36,9 +44,6 @@ public class DynamicMusic : MonoBehaviour {
         if (col.tag == "Player")
         {
             SetSpatialize(false);
-            AudioSource source = GetComponent<AudioSource>();
-            //source.pitch *= 1.5f;
-            Destroy(this);
         }
     }
 }
