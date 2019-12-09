@@ -87,9 +87,9 @@ public class Door : MonoBehaviour
     {
         Vector3 curPos = door.transform.position;
 
-        if (Mathf.Abs(curPos.x - startPos.x) >= doorSpeed * Time.deltaTime ||
-            Mathf.Abs(curPos.y - startPos.y) >= doorSpeed * Time.deltaTime ||
-            Mathf.Abs(curPos.z - startPos.z) >= doorSpeed * Time.deltaTime)
+        if (Mathf.Abs(curPos.x - startPos.x) >= Mathf.Abs(doorSpeed) * Time.deltaTime ||
+            Mathf.Abs(curPos.y - startPos.y) >= Mathf.Abs(doorSpeed) * Time.deltaTime ||
+            Mathf.Abs(curPos.z - startPos.z) >= Mathf.Abs(doorSpeed) * Time.deltaTime)
         {
             curPos -= new Vector3(dir == OpenDir.x ? doorSpeed * Time.deltaTime : 0,
             dir == OpenDir.y ? doorSpeed * Time.deltaTime : 0,

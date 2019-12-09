@@ -20,8 +20,6 @@ public class MusicTrigger : MonoBehaviour {
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<DynamicMusic>();
         volume2D = music.GetVolume(false);
         volume3D = music.GetVolume(true);
-        Debug.Log("2 is " + volume2D);
-        Debug.Log("3 is " + volume3D);
 
         sources = new List<AudioSource>();
 
@@ -39,6 +37,13 @@ public class MusicTrigger : MonoBehaviour {
 
     void SetSpeakers()
     {
+        sources = new List<AudioSource>();
+        sources.Clear();
+        foreach (GameObject s in speakersOn)
+        {
+            sources.Add(s.GetComponent<AudioSource>());
+        }
+        music = GameObject.FindGameObjectWithTag("Music").GetComponent<DynamicMusic>();
         music.MuteAll();
         foreach (AudioSource s in sources)
         {
@@ -72,7 +77,6 @@ public class MusicTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log("col");
         if (col.tag == "Player")
         {
             SetSpeakers();

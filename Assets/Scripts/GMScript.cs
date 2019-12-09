@@ -135,7 +135,8 @@ public class GMScript : MonoBehaviour
         SceneManager.LoadScene(0);
 
         DynamicMusic m = GameObject.FindGameObjectWithTag("Music").GetComponent<DynamicMusic>();
-        m.ResetSpeakers();
+        float musicTime = m.gameObject.GetComponent<AudioSource>().time;
+        m.ResetSpeakers(musicTime);
     }
 
 }

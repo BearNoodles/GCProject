@@ -12,7 +12,7 @@ public class DynamicMusic : MonoBehaviour {
 
     private void Awake()
     {
-        volume2d = 0.15f;
+        volume2d = 0.04f;
         volume3d = 1.0f;
 
         speakers = new List<GameObject>();
@@ -58,7 +58,7 @@ public class DynamicMusic : MonoBehaviour {
         }
     }
 
-    public void ResetSpeakers()
+    public void ResetSpeakers(float musicTime)
     {
         volume2d = 0.15f;
         volume3d = 1.0f;
@@ -78,10 +78,11 @@ public class DynamicMusic : MonoBehaviour {
         foreach (GameObject g in speakers)
         {
             g.GetComponent<AudioSource>().clip = GetComponent<AudioSource>().clip;
+            g.GetComponent<AudioSource>().time = musicTime;
             g.GetComponent<AudioSource>().Play();
         }
 
-        MuteAll();
+        //MuteAll();
     }
     
     

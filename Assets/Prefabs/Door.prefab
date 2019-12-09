@@ -23,6 +23,9 @@ GameObject:
   - component: {fileID: 65000010888203608}
   - component: {fileID: 23000012271051112}
   - component: {fileID: 54000011631474332}
+  - component: {fileID: 114084038155319472}
+  - component: {fileID: 114808786781185868}
+  - component: {fileID: 114324806924659120}
   m_Layer: 0
   m_Name: Door
   m_TagString: Wall
@@ -56,8 +59,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011503272410}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.97, y: 2.5, z: -5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 36.5, y: 32, z: -9.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000013025746748}
@@ -72,7 +75,7 @@ Transform:
   m_GameObject: {fileID: 1000010355991154}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 5, z: 1}
+  m_LocalScale: {x: 24, y: 15, z: 1}
   m_Children: []
   m_Father: {fileID: 4000012266074714}
   m_RootOrder: 0
@@ -156,8 +159,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 5, z: 10}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 24, y: 15, z: 15}
+  m_Center: {x: 0, y: 0, z: -7}
 --- !u!82 &82000010086723584
 AudioSource:
   m_ObjectHideFlags: 1
@@ -359,10 +362,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 695e7e0e8d95e234493e040e04f21f91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorSpeed: 2
+  doorSpeed: -10
   dir: 0
   isDoorOpenOnStart: 0
   player: {fileID: 0}
+--- !u!114 &114084038155319472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010355991154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43300f764e354d642abf0f0dbb612011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Preset: 11
+  Value:
+    LowFreqAbsorption: 0.1
+    MidFreqAbsorption: 0.2
+    HighFreqAbsorption: 0.3
+    Scattering: 0.05
+    LowFreqTransmission: 1
+    MidFreqTransmission: 1
+    HighFreqTransmission: 1
+--- !u!114 &114324806924659120
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010355991154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79e99846fd75c4438917229c144155a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TerrainSimplificationLevel: 0
+  exportAllChildren: 1
 --- !u!114 &114697914672854672
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -376,8 +412,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   directBinaural: 1
   interpolation: 0
-  physicsBasedAttenuation: 1
-  airAbsorption: 1
+  physicsBasedAttenuation: 0
+  airAbsorption: 0
   dipoleWeight: 0
   dipolePower: 0
   occlusionMode: 2
@@ -403,3 +439,15 @@ MonoBehaviour:
   bakedDataIdentifier:
     identifier: 0
     type: 0
+--- !u!114 &114808786781185868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010355991154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e33811057654a34b97fc1b6b0779af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assetFileName: Platformer_Door.instancedmesh

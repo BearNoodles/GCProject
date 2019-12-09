@@ -88,8 +88,12 @@ public class Synth : MonoBehaviour {
                 type = SynthType.sine;
             }
         }
-    
-            gain = volume;
+
+        gain = volume;
+        if (type == SynthType.square)
+        {
+            gain = volume / 2;
+        }
     }
 
     private Vector2 GetInput()
