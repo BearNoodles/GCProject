@@ -143,7 +143,6 @@ public class Synth : MonoBehaviour {
                     data[i] += gainFactor * Mathf.PingPong(phase, 1.0f);
                 }
 
-
                 
                 if (channels == 2)
                 {

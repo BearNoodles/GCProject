@@ -23,6 +23,8 @@ public class GMScript : MonoBehaviour
     private Text gameTimeText;
 
     public GameObject bonusLift;
+
+    DynamicMusic music;
     
 
     // Use this for initialization
@@ -123,7 +125,6 @@ public class GMScript : MonoBehaviour
 
     private static void Reset(float x, float y, float z, int retries, float time, int died)
     {
-        
         PlayerPrefs.SetInt("retries", retries);
         PlayerPrefs.SetFloat("time", time);
         PlayerPrefs.SetFloat("resetPosx", x - 5);
@@ -132,6 +133,9 @@ public class GMScript : MonoBehaviour
         PlayerPrefs.SetInt("died", died);
         PlayerPrefs.Save();
         SceneManager.LoadScene(0);
+
+        DynamicMusic m = GameObject.FindGameObjectWithTag("Music").GetComponent<DynamicMusic>();
+        m.ResetSpeakers();
     }
 
 }

@@ -4,14 +4,35 @@ using UnityEngine;
 
 public class DynamicMusic : MonoBehaviour {
 
-    float Volume2d;
-    float Volume3d;
+    float volume2d;
+    float volume3d;
 
-	// Use this for initialization
-	void Start ()
+    public List<GameObject> speakers;
+
+
+    private void Awake()
     {
-        Volume2d = 0.15f;
-        Volume3d = 1.0f;
+        volume2d = 0.15f;
+        volume3d = 1.0f;
+
+        speakers = new List<GameObject>();
+
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Speaker"))
+        {
+            speakers.Add(g);
+        }
+
+        foreach (GameObject g in speakers)
+        {
+            g.GetComponent<AudioSource>().clip = GetComponent<AudioSource>().clip;
+            g.GetComponent<AudioSource>().Play();
+        }
+
+        MuteAll();
+    }
+    // Use this for initialization
+    void Start ()
+    {
 	}
 	
 	// Update is called once per frame
@@ -20,30 +41,48 @@ public class DynamicMusic : MonoBehaviour {
 		
 	}
 
-    void SetSpatialize(bool value)
+    public float GetVolume(bool spatialised)
     {
-        int blendValue = 0;
-        
-        AudioSource source = GetComponent<AudioSource>();
-        if (value)
+        if(spatialised)
         {
-            blendValue = 1;
-            source.volume = Volume3d;
+            return volume3d;
         }
-        else
-        {
-            source.volume = Volume2d;
-        }
-        source.spatialize = value;
-        source.spatialBlend = blendValue;
-        
+        return volume2d;
     }
 
-    void OnTriggerEnter(Collider col)
+    public void MuteAll()
     {
-        if (col.tag == "Player")
+        foreach(GameObject s in speakers)
         {
-            SetSpatialize(false);
+            s.GetComponent<AudioSource>().volume = 0;
         }
     }
+
+    public void ResetSpeakers()
+    {
+        volume2d = 0.15f;
+        volume3d = 1.0f;
+
+        speakers.Clear();
+
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Speaker"))
+        {
+            if(g.GetComponent<AudioSource>().isActiveAndEnabled)
+                speakers.Add(g);
+        }
+        while(speakers.Count > 3)
+        {
+            speakers.RemoveAt(speakers.Count);
+        }
+
+        foreach (GameObject g in speakers)
+        {
+            g.GetComponent<AudioSource>().clip = GetComponent<AudioSource>().clip;
+            g.GetComponent<AudioSource>().Play();
+        }
+
+        MuteAll();
+    }
+    
+    
 }

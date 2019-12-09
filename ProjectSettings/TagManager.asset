@@ -10,6 +10,9 @@ TagManager:
   - Checkpoint
   - Powerup
   - PuzzleSwitch
+  - Music
+  - Speaker
+  - Trigger
   layers:
   - Default
   - TransparentFX
