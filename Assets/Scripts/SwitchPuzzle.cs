@@ -25,7 +25,7 @@ public class SwitchPuzzle : MonoBehaviour
         //foreach (GameObject s in switches)
         //    if (s.GetComponent<SwitchPuzzle>().group > maxGroup)
         //        maxGroup = s.GetComponent<SwitchPuzzle>().group;
-        maxGroup++;
+        maxGroup=1000;
         current = new int[maxGroup];
         for (int i = 0; i < maxGroup; i++)
             current[i] = -1;

@@ -12,22 +12,25 @@ public class DynamicMusic : MonoBehaviour {
 
     private void Awake()
     {
+        //Volumes for when music is 2D or 3D
         volume2d = 0.04f;
         volume3d = 1.0f;
 
+        //Find all speakers in scene
         speakers = new List<GameObject>();
-
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("Speaker"))
         {
             speakers.Add(g);
         }
 
+        //Get speakers audio sources and set the music clip playing
         foreach (GameObject g in speakers)
         {
             g.GetComponent<AudioSource>().clip = GetComponent<AudioSource>().clip;
             g.GetComponent<AudioSource>().Play();
         }
 
+        //Set all speakers to zero volume (but leave playing)
         MuteAll();
     }
     // Use this for initialization
@@ -41,6 +44,7 @@ public class DynamicMusic : MonoBehaviour {
 		
 	}
 
+    //Return either 2D or 3D volume
     public float GetVolume(bool spatialised)
     {
         if(spatialised)
@@ -50,6 +54,7 @@ public class DynamicMusic : MonoBehaviour {
         return volume2d;
     }
 
+    //Mutes all speakers
     public void MuteAll()
     {
         foreach(GameObject s in speakers)
@@ -58,6 +63,8 @@ public class DynamicMusic : MonoBehaviour {
         }
     }
 
+    //Finds speakers again when scene is reset
+    //Awake is not called again since object uses dont destroy on load
     public void ResetSpeakers(float musicTime)
     {
         volume2d = 0.15f;
@@ -81,8 +88,6 @@ public class DynamicMusic : MonoBehaviour {
             g.GetComponent<AudioSource>().time = musicTime;
             g.GetComponent<AudioSource>().Play();
         }
-
-        //MuteAll();
     }
     
     

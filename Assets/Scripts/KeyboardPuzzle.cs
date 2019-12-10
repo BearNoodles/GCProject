@@ -20,12 +20,17 @@ public class KeyboardPuzzle : MonoBehaviour {
     void Start ()
     {
         puzzleComplete = false;
+
+        //Next key is the next key to be pressed in the puzzle
         nextKey = 0;
 
+        //Synthesiser
         synthesiser = GetComponent<Synth>();
 
+        //The gameobjects representing the piano keys
         keyObjects = new List<GameObject>();
 
+        //Add key objects to a list of gameobjects
 	    for(int i = 0; i < transform.childCount; i++)
         {
             keyObjects.Add(transform.GetChild(i).gameObject);
@@ -41,24 +46,29 @@ public class KeyboardPuzzle : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //Debug.Log(nextKey);
+
 	}
 
+    //Individual keys call this to add a note to the synthesiser
     public void PlayNote(int midiNo)
     {
         synthesiser.AddNote(midiNo);
     }
 
+    //Stop a note currently playing in the synthesiser
     public void StopNote(int midiNo)
     {
         synthesiser.RemoveNote(midiNo);
     }
 
+    //Returns which key is next in the puzzle
     public int GetNextKey()
     {
         return nextKey;
     }
 
+    //Advances the nextkey variable if the puzzle is not complete
+    //Completes puzzle if the final key is pressed in order
     public void AdvanceKeNumber()
     {
         if(puzzleComplete)
@@ -72,6 +82,7 @@ public class KeyboardPuzzle : MonoBehaviour {
         }
     }
 
+    //Resets the order of the keys to be pressed
     public void ResetPuzzle()
     {
         nextKey = 0;
@@ -79,7 +90,10 @@ public class KeyboardPuzzle : MonoBehaviour {
 
     private void CompletePuzzle()
     {
+        //Plays correct sound
         //correctSound.Play();
+
+        //Stops any currently playing sounds and queues some notes to play a tune
         synthesiser.ClearNotes();
         synthesiser.AddTimedNote(60, 0.5f);
         synthesiser.AddTimedNote(57, 0.5f);
@@ -87,6 +101,9 @@ public class KeyboardPuzzle : MonoBehaviour {
         synthesiser.AddTimedNote(64, 0.5f);
         synthesiser.AddTimedNote(62, 0.5f);
         puzzleComplete = true;
+
+        //Enables scripts on attached game objects so they activate
+        //Door opens and lift starts moving
         for (int i = 0; i < puzzleObjects.Count; i++)
         {
             if (puzzleObjects[i] != null)

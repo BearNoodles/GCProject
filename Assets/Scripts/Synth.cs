@@ -37,18 +37,18 @@ public class Synth : MonoBehaviour {
 
     int currentNotes;
 
-    int timeIndex;
-
-    int x = 0;
+    //int timeIndex;
 
     // Use this for initialization
     void Start()
     {
-        //scaleNotes = new int[7] { 69, 71, 72, 74, 76, 77, 79 };
-        //currentNotes = 0;
+        //List of notes currently playing
         noteFreqs = new List<float>();
+
+        //List of notes to be queued 
         timedNotes = new List<TimedNote>();
         
+        //Synth wave type
         type = SynthType.sine;
         
     }
@@ -56,23 +56,25 @@ public class Synth : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //Debug.Log(timedNotes.Count);
+        //Check player Input
         Vector2 input = GetInput();
         
 
-        //ONLY UPDATE TIME IF TIMED NOTE IS CURRENTLY PLAYING
+        //Checks if there are any timed notes left to play
         if(timedNotes.Count > 0)
         {
+            //If no notes are currently playing add first note from timed notes
             if(noteFreqs.Count <= 0)
             {
                 AddNote(timedNotes[0].midiNumber);
             }
+            //Otherwise increase the time of the currently playing note
             else
             {
                 timedNotes[0].timer += Time.deltaTime;
             }
 
-
+            //If currently playing timed note has played for set time then remove from both timednotes and notefreqs
             if (timedNotes[0].timer > timedNotes[0].maxTime)
             {
                 RemoveNote(timedNotes[0].midiNumber);
@@ -80,6 +82,7 @@ public class Synth : MonoBehaviour {
             }
         }
         
+        //Change synth wave type when K is pressed
         if (Input.GetKeyDown(KeyCode.K))
         {
             type++;
@@ -89,7 +92,10 @@ public class Synth : MonoBehaviour {
             }
         }
 
+        //set gain
         gain = volume;
+
+        //Half the gain if its a square wave because my ears
         if (type == SynthType.square)
         {
             gain = volume / 2;
@@ -106,17 +112,20 @@ public class Synth : MonoBehaviour {
         return input;
     }
 
-
+    //Sets audio data to be played
     void OnAudioFilterRead(float[] data, int channels)
     {
+        //Gain factor is used to reduce volume of multiple notes playing at once
         float gainFactor = gain;
         if(noteFreqs.Count > 0)
         {
             gainFactor = gain / noteFreqs.Count;
         }
 
+        //Loop for each note in list
         for (int n = 0; n < noteFreqs.Count; n++)
         {
+            //incrememnt to be added to wave phase based on note frequency
             increment = noteFreqs[n] * 2.0f * Mathf.PI / samplingFrequency;
             for (int i = 0; i < data.Length; i += channels)
             {
@@ -147,12 +156,13 @@ public class Synth : MonoBehaviour {
                     data[i] += gainFactor * Mathf.PingPong(phase, 1.0f);
                 }
 
-                
+                //Copy left channel to right
                 if (channels == 2)
                 {
                     data[i + 1] = data[i];
                 }
 
+                //Reset the phase
                 if (phase > (Mathf.PI * 2))
                 {
                     phase = 0.0f;
@@ -169,10 +179,10 @@ public class Synth : MonoBehaviour {
         return freq;
     }
 
-    public float CreateSine(int timeIndex, float frequency, float sampleRate, float amplitude)
-    {
-        return Mathf.Sin(2 * Mathf.PI * timeIndex * frequency / sampleRate) * amplitude;
-    }
+    //public float CreateSine(int timeIndex, float frequency, float sampleRate, float amplitude)
+    //{
+    //    return Mathf.Sin(2 * Mathf.PI * timeIndex * frequency / sampleRate) * amplitude;
+    //}
 
     public void AddNote(int midiNo)
     {
